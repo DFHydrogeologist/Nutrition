@@ -266,7 +266,7 @@
   /* DATA PAGE */
   .stats-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
     margin-bottom: 24px;
   }
@@ -337,7 +337,6 @@
   .macro-pill b { color: var(--text); }
 
   .porc-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .porc-btn {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -380,9 +379,7 @@
   }
   .porc-btn:hover .porc-btn-arrow { color: var(--or); }
 
-  @media (max-width: 420px) {
-    .porc-menu { grid-template-columns: 1fr; }
-  }
+  
   .porc-back {
     display: inline-flex;
     align-items: center;
@@ -496,7 +493,7 @@
         <div class="kcal-right">
           <div class="kcal-label">kcal objetivo · superávit +97 sobre TDEE</div>
           <div class="kcal-macros">
-            <div class="macro-pill">Prot <b>~125g</b></div>
+            <div class="macro-pill">Prot <b>~165-170g</b></div>
             <div class="macro-pill">Carbs <b>~210g</b></div>
             <div class="macro-pill">Grasas <b>~110g</b></div>
           </div>
@@ -512,10 +509,9 @@
           </div>
           <div class="block-body open">
             <div class="food-row"><span class="food-name">Cereal</span><span class="food-qty">1</span><span class="food-ex">30g avena</span></div>
-            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">1½</span><span class="food-ex">2 huevos + ½ scoop</span></div>
+            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">1</span><span class="food-ex">2 huevos</span></div>
             <div class="food-row"><span class="food-name">Lácteo</span><span class="food-qty">1</span><span class="food-ex">1 yogurt</span></div>
             <div class="food-row"><span class="food-name">ARL</span><span class="food-qty">1</span><span class="food-ex">13 almendras + 15g semillas</span></div>
-            <div class="food-row"><span class="food-name">Fruta</span><span class="food-qty">1</span><span class="food-ex">1 plátano</span></div>
           </div>
         </div>
 
@@ -525,7 +521,7 @@
             <span class="block-hour">10:00</span>
           </div>
           <div class="block-body">
-            <div class="food-row"><span class="food-name">Fruta</span><span class="food-qty">1</span><span class="food-ex">1 manzana</span></div>
+            <div class="food-row"><span class="food-name">Fruta</span><span class="food-qty">1</span><span class="food-ex">1 plátano</span></div>
             <div class="food-row"><span class="food-name">ARL</span><span class="food-qty">1</span><span class="food-ex">26 almendras</span></div>
           </div>
         </div>
@@ -537,7 +533,7 @@
           </div>
           <div class="block-body">
             <div class="food-row"><span class="food-name">Cereal</span><span class="food-qty">1</span><span class="food-ex">25g arroz integral</span></div>
-            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">3</span><span class="food-ex">140g lentejas + 40g pollo</span></div>
+            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">4</span><span class="food-ex">140g lentejas + 40g pollo + ½ scoop</span></div>
             <div class="food-row"><span class="food-name">VG</span><span class="food-qty">1</span><span class="food-ex">1t brócoli</span></div>
             <div class="food-row"><span class="food-name">VLC</span><span class="food-qty">1</span><span class="food-ex">1t lechuga</span></div>
             <div class="food-row"><span class="food-name">Aceite</span><span class="food-qty">½</span><span class="food-ex">2 cdta oliva</span></div>
@@ -564,7 +560,7 @@
             <span class="block-hour">21:00</span>
           </div>
           <div class="block-body">
-            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">2½</span><span class="food-ex">160g pollo o 260g salmón</span></div>
+            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">4</span><span class="food-ex">260g pollo o 390g salmón</span></div>
             <div class="food-row"><span class="food-name">VG</span><span class="food-qty">1</span><span class="food-ex">1t brócoli</span></div>
             <div class="food-row"><span class="food-name">VLC</span><span class="food-qty">1</span><span class="food-ex">1t apio</span></div>
             <div class="food-row"><span class="food-name">ARL</span><span class="food-qty">1½</span><span class="food-ex">90g palta</span></div>
@@ -598,7 +594,7 @@
         <div class="kcal-right">
           <div class="kcal-label">kcal · compensa ~280–380 kcal gasto extra del trote</div>
           <div class="kcal-macros">
-            <div class="macro-pill">Prot <b>~112g</b></div>
+            <div class="macro-pill">Prot <b>~155-160g</b></div>
             <div class="macro-pill">Carbs <b>~250g</b></div>
             <div class="macro-pill">Grasas <b>~100g</b></div>
           </div>
@@ -614,10 +610,9 @@
           </div>
           <div class="block-body">
             <div class="food-row"><span class="food-name">Cereal</span><span class="food-qty">1</span><span class="food-ex">30g avena</span></div>
-            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">1½</span><span class="food-ex">2 huevos + ½ scoop</span></div>
+            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">1</span><span class="food-ex">2 huevos</span></div>
             <div class="food-row"><span class="food-name">Lácteo</span><span class="food-qty">1</span><span class="food-ex">1 yogurt</span></div>
             <div class="food-row"><span class="food-name">ARL</span><span class="food-qty">1</span><span class="food-ex">13 almendras</span></div>
-            <div class="food-row"><span class="food-name">Fruta</span><span class="food-qty">1</span><span class="food-ex">1 plátano</span></div>
           </div>
         </div>
 
@@ -627,7 +622,7 @@
             <span class="block-hour">10:00</span>
           </div>
           <div class="block-body">
-            <div class="food-row"><span class="food-name">Fruta</span><span class="food-qty">1</span><span class="food-ex">1 manzana</span></div>
+            <div class="food-row"><span class="food-name">Fruta</span><span class="food-qty">1</span><span class="food-ex">1 plátano</span></div>
             <div class="food-row"><span class="food-name">ARL</span><span class="food-qty">1</span><span class="food-ex">26 almendras</span></div>
           </div>
         </div>
@@ -639,7 +634,7 @@
           </div>
           <div class="block-body">
             <div class="food-row"><span class="food-name">Cereal</span><span class="food-qty">1</span><span class="food-ex">25g arroz integral</span></div>
-            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">3</span><span class="food-ex">140g lentejas + 40g pollo</span></div>
+            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">4</span><span class="food-ex">140g lentejas + 40g pollo + ½ scoop</span></div>
             <div class="food-row"><span class="food-name">VG</span><span class="food-qty">1</span><span class="food-ex">1t brócoli</span></div>
             <div class="food-row"><span class="food-name">VLC</span><span class="food-qty">1</span><span class="food-ex">1t lechuga</span></div>
             <div class="food-row"><span class="food-name">Aceite</span><span class="food-qty">½</span><span class="food-ex">2 cdta oliva</span></div>
@@ -664,7 +659,7 @@
             <span class="block-hour"></span>
           </div>
           <div class="block-body">
-            <div class="food-row"><span class="food-name">Scoop</span><span class="food-qty">½</span><span class="food-ex">½ scoop whey</span></div>
+            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">1</span><span class="food-ex">½ scoop whey</span></div>
             <div class="food-row"><span class="food-name">Fruta</span><span class="food-qty">1</span><span class="food-ex">1 naranja · repone glucógeno inmediato</span></div>
           </div>
         </div>
@@ -676,7 +671,7 @@
           </div>
           <div class="block-body">
             <div class="food-row"><span class="food-name">Cereal</span><span class="food-qty">2</span><span class="food-ex">100g arroz cocido · repone glucógeno</span></div>
-            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">2½</span><span class="food-ex">160g pollo</span></div>
+            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">3</span><span class="food-ex">200g pollo o 300g salmón</span></div>
             <div class="food-row"><span class="food-name">VG</span><span class="food-qty">1</span><span class="food-ex">1t brócoli</span></div>
             <div class="food-row"><span class="food-name">VLC</span><span class="food-qty">1</span><span class="food-ex">1t apio</span></div>
             <div class="food-row"><span class="food-name">ARL</span><span class="food-qty">1½</span><span class="food-ex">90g palta</span></div>
@@ -710,7 +705,7 @@
         <div class="kcal-right">
           <div class="kcal-label">kcal · superávit moderado sin entreno</div>
           <div class="kcal-macros">
-            <div class="macro-pill">Prot <b>~100g</b></div>
+            <div class="macro-pill">Prot <b>~145-150g</b></div>
             <div class="macro-pill">Carbs <b>~175g</b></div>
             <div class="macro-pill">Grasas <b>~110g</b></div>
           </div>
@@ -807,11 +802,11 @@
       <div class="data-block">
         <div class="data-head">Proteína total por tipo de día</div>
         <div class="data-body">
-          <div class="data-row"><span class="data-row-name">9 porciones comida</span><span class="data-row-val">~90–100 g</span></div>
+          <div class="data-row"><span class="data-row-name">9 porciones comida</span><span class="data-row-val">~144 g</span></div>
           <div class="data-divider"></div>
-          <div class="data-row"><span class="data-row-name">Día de fuerza + 1 scoop</span><span class="data-row-val">~125 g total</span></div>
-          <div class="data-row"><span class="data-row-name">Día de trote + ½ scoop</span><span class="data-row-val">~112 g total</span></div>
-          <div class="data-row"><span class="data-row-name">Día de descanso</span><span class="data-row-val">~90–100 g total</span></div>
+          <div class="data-row"><span class="data-row-name">Día de fuerza + 1 scoop</span><span class="data-row-val">~165-170 g total</span></div>
+          <div class="data-row"><span class="data-row-name">Día de trote + ½ scoop</span><span class="data-row-val">~155-160 g total</span></div>
+          <div class="data-row"><span class="data-row-name">Día de descanso</span><span class="data-row-val">~144 g total</span></div>
         </div>
       </div>
 
@@ -1046,7 +1041,7 @@
     const mirror = document.querySelectorAll(`[onclick="show('${id}',this)"]`);
     mirror.forEach(m => m.classList.add('active'));
     if (id === 'porciones') {
-      document.getElementById('porc-menu').style.display = 'flex';
+      document.getElementById('porc-menu').style.display = 'grid';
       document.getElementById('porc-detail').style.display = 'none';
       document.querySelectorAll('.porc-section').forEach(s => s.classList.remove('active'));
     }
@@ -1061,7 +1056,7 @@
 
   function backPorc() {
     document.getElementById('porc-detail').style.display = 'none';
-    document.getElementById('porc-menu').style.display = 'flex';
+    document.getElementById('porc-menu').style.display = 'grid';
   }
 
   function toggle(head) {
@@ -1072,7 +1067,7 @@
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js').catch(() => {});
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
     });
   }
 </script>
