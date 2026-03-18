@@ -2,7 +2,7 @@
   "name": "Guía Nutricional",
   "short_name": "Nutrición",
   "description": "Guía nutricional personalizada para calistenia",
-  "start_url": "/Nutrition/index.html",
+  "start_url": "/Nutrition/",
   "scope": "/Nutrition/",
   "display": "standalone",
   "background_color": "#FAFAF8",
