@@ -1,4 +1,4 @@
-const CACHE = 'guia-nutricional-v1';
+const CACHE = 'guia-nutricional-v2';
 const FILES = [
   '/Nutrition/index.html',
   '/Nutrition/manifest.json',
