@@ -1,7 +1,9 @@
 const CACHE = 'guia-nutricional-v1';
 const FILES = [
-  '/index.html',
-  '/manifest.json'
+  '/Nutrition/index.html',
+  '/Nutrition/manifest.json',
+  '/Nutrition/icon-192.png',
+  '/Nutrition/icon-512.png'
 ];
 
 self.addEventListener('install', e => {
