@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Nutrición">
+<meta name="theme-color" content="#E8943A">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Guía Nutricional · Calistenia</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --or: #E8943A;
+    --or-bg: #FDF0E3;
+    --dark: #1A1A1A;
+    --text: #1A1A1A;
+    --text-2: #666;
+    --text-3: #999;
+    --bg: #FAFAF8;
+    --bg-2: #F4F4F2;
+    --bg-3: #EEEEE9;
+    --border: rgba(0,0,0,0.1);
+    --border-2: rgba(0,0,0,0.06);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --text: #F0EFE9;
+      --text-2: #999;
+      --text-3: #666;
+      --bg: #141414;
+      --bg-2: #1E1E1E;
+      --bg-3: #282828;
+      --border: rgba(255,255,255,0.1);
+      --border-2: rgba(255,255,255,0.06);
+    }
+  }
+
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* LAYOUT */
+  .layout {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    padding: 32px 20px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .logo {
+    margin-bottom: 32px;
+  }
+  .logo h1 {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .logo p {
+    font-size: 12px;
+    color: var(--text-3);
+    margin-top: 3px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .nav-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+    margin-top: 24px;
+  }
+  .nav-label:first-of-type { margin-top: 0; }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-2);
+    transition: all 0.15s;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+  .nav-item:hover { background: var(--bg-2); color: var(--text); }
+  .nav-item.active {
+    background: var(--or-bg);
+    color: var(--or);
+    font-weight: 500;
+  }
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.5;
+    flex-shrink: 0;
+  }
+  .nav-item.active .nav-dot { opacity: 1; }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-3);
+    line-height: 1.6;
+  }
+
+  /* MAIN */
+  .main {
+    flex: 1;
+    min-width: 0;
+    padding: 40px 48px;
+    max-width: 780px;
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* PAGE HEADER */
+  .page-header {
+    margin-bottom: 32px;
+  }
+  .page-tag {
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+    color: var(--or);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .page-title {
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  /* KCAL HERO */
+  .kcal-hero {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 24px 28px;
+    background: var(--or-bg);
+    border-radius: var(--radius);
+    margin-bottom: 28px;
+  }
+  .kcal-num {
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--or);
+    line-height: 1;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .kcal-right { flex: 1; }
+  .kcal-label { font-size: 13px; color: var(--text-2); margin-bottom: 8px; }
+  .scoop-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg);
+    border-radius: 100px;
+    padding: 5px 12px;
+    font-size: 13px;
+    color: var(--text-2);
+    border: 1px solid var(--border);
+  }
+  .scoop-badge b { color: var(--or); }
+
+  /* TIME BLOCKS */
+  .blocks { display: flex; flex-direction: column; gap: 8px; }
+
+  .block {
+    border: 1px solid var(--border-2);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .block-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: var(--bg-2);
+    cursor: pointer;
+    user-select: none;
+  }
+  .block-head:hover { background: var(--bg-3); }
+  .block.highlight .block-head { background: var(--or-bg); }
+  .block-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .block.highlight .block-name { color: var(--or); }
+  .block-hour {
+    font-size: 12px;
+    color: var(--text-3);
+    font-family: 'Space Mono', monospace;
+  }
+  .block-body {
+    padding: 12px 16px;
+    display: none;
+  }
+  .block-body.open { display: block; }
+
+  .food-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 12px;
+    align-items: baseline;
+    padding: 4px 0;
+    font-size: 14px;
+  }
+  .food-name { color: var(--text-2); }
+  .food-qty { font-weight: 500; color: var(--text); text-align: right; min-width: 28px; }
+  .food-ex { font-size: 12px; color: var(--text-3); text-align: right; }
+  .food-divider { height: 1px; background: var(--border-2); margin: 6px 0; }
+
+  /* TOTALS */
+  .totals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 20px;
+  }
+  .total-chip {
+    padding: 5px 12px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-2);
+    background: var(--bg);
+  }
+  .total-chip b { color: var(--or); }
+
+  /* DATA PAGE */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .stat {
+    background: var(--bg-2);
+    border-radius: var(--radius);
+    padding: 16px;
+  }
+  .stat-label { font-size: 11px; color: var(--text-3); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-val { font-size: 22px; font-weight: 500; color: var(--text); }
+  .stat-val.or { color: var(--or); }
+  .stat-sub { font-size: 11px; color: var(--text-3); margin-top: 3px; }
+
+  .data-block {
+    border: 1px solid var(--border-2);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .data-head {
+    padding: 10px 16px;
+    background: var(--bg-2);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .data-body { padding: 12px 16px; }
+  .data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 4px 0;
+    font-size: 14px;
+  }
+  .data-row-name { color: var(--text-2); }
+  .data-row-val { font-weight: 500; color: var(--text); }
+  .data-divider { height: 1px; background: var(--border-2); margin: 6px 0; }
+
+  /* MOBILE */
+  .mobile-nav {
+    display: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .mobile-nav::-webkit-scrollbar { display: none; }
+
+  .kcal-macros {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .macro-pill {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 100px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text-2);
+  }
+  .macro-pill b { color: var(--text); }
+
+  .porc-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .porc-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 18px 16px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-2);
+    background: var(--bg-2);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.18s;
+    text-align: left;
+    width: 100%;
+  }
+  .porc-btn:hover {
+    background: var(--bg);
+    border-color: var(--or);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(232,148,58,0.12);
+  }
+  .porc-btn-icon {
+    width: 36px; height: 36px;
+    border-radius: var(--radius-sm);
+    background: var(--or-bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .porc-btn-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .porc-btn-arrow {
+    font-size: 11px;
+    color: var(--text-3);
+    margin-top: auto;
+    transition: all 0.15s;
+  }
+  .porc-btn:hover .porc-btn-arrow { color: var(--or); }
+
+  @media (max-width: 420px) {
+    .porc-menu { grid-template-columns: 1fr; }
+  }
+  .porc-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--text-2);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: all 0.15s;
+  }
+  .porc-back:hover { background: var(--bg-2); color: var(--text); }
+  .porc-section { display: none; }
+  .porc-section.active { display: block; }
+    .sidebar { display: none; }
+    .mobile-nav { display: flex; }
+    .main { padding: 20px 16px 40px; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .kcal-hero { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .kcal-num { font-size: 40px; }
+    .food-ex { display: none; }
+    .food-row { grid-template-columns: 1fr auto; }
+  }
+
+  .mob-pill {
+    flex-shrink: 0;
+    padding: 7px 16px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: var(--bg-2);
+    color: var(--text-2);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    transition: all 0.15s;
+  }
+  .mob-pill:hover { border-color: var(--or); color: var(--or); background: var(--or-bg); }
+  .mob-pill.active {
+    background: var(--or);
+    color: #fff;
+    border-color: var(--or);
+    font-weight: 500;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .nav-item.active { background: rgba(232,148,58,0.15); }
+  }
+</style>
+</head>
+<body>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav">
+  <button class="mob-pill" onclick="show('fuerza',this)">Fuerza</button>
+  <button class="mob-pill" onclick="show('trote',this)">Trote</button>
+  <button class="mob-pill" onclick="show('descanso',this)">Descanso</button>
+  <button class="mob-pill active" onclick="show('datos',this)">Mis datos</button>
+  <button class="mob-pill" onclick="show('porciones',this)">Porciones</button>
+</div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <h1>Guía nutricional</h1>
+      <p>37 años · 70 kg · 9,6% grasa</p>
+    </div>
+
+    <div class="nav-label">Tipo de día</div>
+    <button class="nav-item" onclick="show('fuerza',this)">
+      <span class="nav-dot"></span> Día de fuerza
+    </button>
+    <button class="nav-item" onclick="show('trote',this)">
+      <span class="nav-dot"></span> Día de trote
+    </button>
+    <button class="nav-item" onclick="show('descanso',this)">
+      <span class="nav-dot"></span> Día de descanso
+    </button>
+
+    <div class="nav-label">Info</div>
+    <button class="nav-item active" onclick="show('datos',this)">
+      <span class="nav-dot"></span> Mis datos
+    </button>
+    <button class="nav-item" onclick="show('porciones',this)">
+      <span class="nav-dot"></span> Guía de porciones
+    </button>
+
+    <div class="sidebar-footer">
+      Ajuste nutricional para calistenia. No reemplaza supervisión profesional.
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- FUERZA -->
+    <div class="panel" id="fuerza">
+      <div class="page-header">
+        <div class="page-tag">Calistenia · fuerza</div>
+        <div class="page-title">Día de entrenamiento</div>
+      </div>
+
+      <div class="kcal-hero">
+        <div class="kcal-num">2.650</div>
+        <div class="kcal-right">
+          <div class="kcal-label">kcal objetivo · superávit +97 sobre TDEE</div>
+          <div class="kcal-macros">
+            <div class="macro-pill">Prot <b>~125g</b></div>
+            <div class="macro-pill">Carbs <b>~210g</b></div>
+            <div class="macro-pill">Grasas <b>~110g</b></div>
+          </div>
+          <div class="scoop-badge">Post-entreno: <b>1 scoop whey</b> &nbsp;(aparte de porciones)</div>
+        </div>
+      </div>
+
+      <div class="blocks">
+        <div class="block open-default">
+          <div class="block-head" onclick="toggle(this)">
+            <span class="block-name">Desayuno</span>
+            <span class="block-hour">07:00</span>
+          </div>
+          <div class="block-body open">
+            <div class="food-row"><span class="food-name">Cereal</span><span class="food-qty">1</span><span class="food-ex">30g avena</span></div>
+            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">1½</span><span class="food-ex">2 huevos + ½ scoop</span></div>
+            <div class="food-row"><span class="food-name">Lácteo</span><span class="food-qty">1</span><span class="food-ex">1 yogurt</span></div>
+            <div class="food-row"><span class="food-name">ARL</span><span class="food-qty">1</span><span class="food-ex">13 almendras + 15g semillas</span></div>
+            <div class="food-row"><span class="food-name">Fruta</span><span class="food-qty">1</span><span class="food-ex">1 plátano</span></div>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-head" onclick="toggle(this)">
+            <span class="block-name">Colación</span>
+            <span class="block-hour">10:00</span>
+          </div>
+          <div class="block-body">
+            <div class="food-row"><span class="food-name">Fruta</span><span class="food-qty">1</span><span class="food-ex">1 manzana</span></div>
+            <div class="food-row"><span class="food-name">ARL</span><span class="food-qty">1</span><span class="food-ex">26 almendras</span></div>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-head" onclick="toggle(this)">
+            <span class="block-name">Almuerzo</span>
+            <span class="block-hour">13:00</span>
+          </div>
+          <div class="block-body">
+            <div class="food-row"><span class="food-name">Cereal</span><span class="food-qty">1</span><span class="food-ex">25g arroz integral</span></div>
+            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">3</span><span class="food-ex">140g lentejas + 40g pollo</span></div>
+            <div class="food-row"><span class="food-name">VG</span><span class="food-qty">1</span><span class="food-ex">1t brócoli</span></div>
+            <div class="food-row"><span class="food-name">VLC</span><span class="food-qty">1</span><span class="food-ex">1t lechuga</span></div>
+            <div class="food-row"><span class="food-name">Aceite</span><span class="food-qty">½</span><span class="food-ex">2 cdta oliva</span></div>
+            <div class="food-row"><span class="food-name">Fruta</span><span class="food-qty">1</span><span class="food-ex">1 naranja</span></div>
+          </div>
+        </div>
+
+        <div class="block highlight">
+          <div class="block-head" onclick="toggle(this)">
+            <span class="block-name">Pre-entreno</span>
+            <span class="block-hour">17:00</span>
+          </div>
+          <div class="block-body">
+            <div class="food-row"><span class="food-name">Cereal</span><span class="food-qty">2</span><span class="food-ex">60g avena</span></div>
+            <div class="food-row"><span class="food-name">Lácteo</span><span class="food-qty">1</span><span class="food-ex">200cc leche s/lactosa</span></div>
+            <div class="food-row"><span class="food-name">ARL</span><span class="food-qty">½</span><span class="food-ex">5 nueces mariposa</span></div>
+            <div class="food-row"><span class="food-name">Fruta</span><span class="food-qty">1</span><span class="food-ex">1 plátano · 400ml agua 2h antes</span></div>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-head" onclick="toggle(this)">
+            <span class="block-name">Cena</span>
+            <span class="block-hour">21:00</span>
+          </div>
+          <div class="block-body">
+            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">2½</span><span class="food-ex">160g pollo o 260g salmón</span></div>
+            <div class="food-row"><span class="food-name">VG</span><span class="food-qty">1</span><span class="food-ex">1t brócoli</span></div>
+            <div class="food-row"><span class="food-name">VLC</span><span class="food-qty">1</span><span class="food-ex">1t apio</span></div>
+            <div class="food-row"><span class="food-name">ARL</span><span class="food-qty">1½</span><span class="food-ex">90g palta</span></div>
+            <div class="food-row"><span class="food-name">Aceite</span><span class="food-qty">½</span><span class="food-ex">2 cdta oliva</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="totals">
+        <div class="total-chip">Cereal <b>4</b></div>
+        <div class="total-chip">Proteína <b>9</b></div>
+        <div class="total-chip">Lácteo <b>2</b></div>
+        <div class="total-chip">Fruta <b>3</b></div>
+        <div class="total-chip">ARL <b>4</b></div>
+        <div class="total-chip">VG <b>2</b></div>
+        <div class="total-chip">VLC <b>2+</b></div>
+        <div class="total-chip">Aceite <b>1</b></div>
+        <div class="total-chip">Agua <b>2 L+</b></div>
+      </div>
+    </div>
+
+    <!-- TROTE -->
+    <div class="panel" id="trote">
+      <div class="page-header">
+        <div class="page-tag">Cardio · 3–5 km</div>
+        <div class="page-title">Día de trote</div>
+      </div>
+
+      <div class="kcal-hero">
+        <div class="kcal-num">2.750</div>
+        <div class="kcal-right">
+          <div class="kcal-label">kcal · compensa ~280–380 kcal gasto extra del trote</div>
+          <div class="kcal-macros">
+            <div class="macro-pill">Prot <b>~112g</b></div>
+            <div class="macro-pill">Carbs <b>~250g</b></div>
+            <div class="macro-pill">Grasas <b>~100g</b></div>
+          </div>
+          <div class="scoop-badge">Post-trote: <b>½ scoop whey</b> &nbsp;(aparte de porciones)</div>
+        </div>
+      </div>
+
+      <div class="blocks">
+        <div class="block">
+          <div class="block-head" onclick="toggle(this)">
+            <span class="block-name">Desayuno</span>
+            <span class="block-hour">07:00</span>
+          </div>
+          <div class="block-body">
+            <div class="food-row"><span class="food-name">Cereal</span><span class="food-qty">1</span><span class="food-ex">30g avena</span></div>
+            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">1½</span><span class="food-ex">2 huevos + ½ scoop</span></div>
+            <div class="food-row"><span class="food-name">Lácteo</span><span class="food-qty">1</span><span class="food-ex">1 yogurt</span></div>
+            <div class="food-row"><span class="food-name">ARL</span><span class="food-qty">1</span><span class="food-ex">13 almendras</span></div>
+            <div class="food-row"><span class="food-name">Fruta</span><span class="food-qty">1</span><span class="food-ex">1 plátano</span></div>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-head" onclick="toggle(this)">
+            <span class="block-name">Colación</span>
+            <span class="block-hour">10:00</span>
+          </div>
+          <div class="block-body">
+            <div class="food-row"><span class="food-name">Fruta</span><span class="food-qty">1</span><span class="food-ex">1 manzana</span></div>
+            <div class="food-row"><span class="food-name">ARL</span><span class="food-qty">1</span><span class="food-ex">26 almendras</span></div>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-head" onclick="toggle(this)">
+            <span class="block-name">Almuerzo</span>
+            <span class="block-hour">13:00</span>
+          </div>
+          <div class="block-body">
+            <div class="food-row"><span class="food-name">Cereal</span><span class="food-qty">1</span><span class="food-ex">25g arroz integral</span></div>
+            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">3</span><span class="food-ex">140g lentejas + 40g pollo</span></div>
+            <div class="food-row"><span class="food-name">VG</span><span class="food-qty">1</span><span class="food-ex">1t brócoli</span></div>
+            <div class="food-row"><span class="food-name">VLC</span><span class="food-qty">1</span><span class="food-ex">1t lechuga</span></div>
+            <div class="food-row"><span class="food-name">Aceite</span><span class="food-qty">½</span><span class="food-ex">2 cdta oliva</span></div>
+            <div class="food-row"><span class="food-name">Fruta</span><span class="food-qty">1</span><span class="food-ex">1 naranja</span></div>
+          </div>
+        </div>
+
+        <div class="block highlight">
+          <div class="block-head" onclick="toggle(this)">
+            <span class="block-name">Pre-trote</span>
+            <span class="block-hour">17:00</span>
+          </div>
+          <div class="block-body">
+            <div class="food-row"><span class="food-name">Cereal</span><span class="food-qty">1</span><span class="food-ex">30g avena</span></div>
+            <div class="food-row"><span class="food-name">Fruta</span><span class="food-qty">1</span><span class="food-ex">1 plátano · 400ml agua 2h antes</span></div>
+          </div>
+        </div>
+
+        <div class="block highlight">
+          <div class="block-head" onclick="toggle(this)">
+            <span class="block-name">Post-trote</span>
+            <span class="block-hour"></span>
+          </div>
+          <div class="block-body">
+            <div class="food-row"><span class="food-name">Scoop</span><span class="food-qty">½</span><span class="food-ex">½ scoop whey</span></div>
+            <div class="food-row"><span class="food-name">Fruta</span><span class="food-qty">1</span><span class="food-ex">1 naranja · repone glucógeno inmediato</span></div>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-head" onclick="toggle(this)">
+            <span class="block-name">Cena</span>
+            <span class="block-hour">21:00</span>
+          </div>
+          <div class="block-body">
+            <div class="food-row"><span class="food-name">Cereal</span><span class="food-qty">2</span><span class="food-ex">100g arroz cocido · repone glucógeno</span></div>
+            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">2½</span><span class="food-ex">160g pollo</span></div>
+            <div class="food-row"><span class="food-name">VG</span><span class="food-qty">1</span><span class="food-ex">1t brócoli</span></div>
+            <div class="food-row"><span class="food-name">VLC</span><span class="food-qty">1</span><span class="food-ex">1t apio</span></div>
+            <div class="food-row"><span class="food-name">ARL</span><span class="food-qty">1½</span><span class="food-ex">90g palta</span></div>
+            <div class="food-row"><span class="food-name">Aceite</span><span class="food-qty">½</span><span class="food-ex">2 cdta oliva</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="totals">
+        <div class="total-chip">Cereal <b>5</b></div>
+        <div class="total-chip">Proteína <b>9</b></div>
+        <div class="total-chip">Lácteo <b>1</b></div>
+        <div class="total-chip">Fruta <b>4</b></div>
+        <div class="total-chip">ARL <b>3,5</b></div>
+        <div class="total-chip">VG <b>2</b></div>
+        <div class="total-chip">VLC <b>2+</b></div>
+        <div class="total-chip">Aceite <b>1</b></div>
+        <div class="total-chip">Agua <b>3 L+</b></div>
+      </div>
+    </div>
+
+    <!-- DESCANSO -->
+    <div class="panel" id="descanso">
+      <div class="page-header">
+        <div class="page-tag">Recuperación</div>
+        <div class="page-title">Día de descanso</div>
+      </div>
+
+      <div class="kcal-hero">
+        <div class="kcal-num">2.450</div>
+        <div class="kcal-right">
+          <div class="kcal-label">kcal · superávit moderado sin entreno</div>
+          <div class="kcal-macros">
+            <div class="macro-pill">Prot <b>~100g</b></div>
+            <div class="macro-pill">Carbs <b>~175g</b></div>
+            <div class="macro-pill">Grasas <b>~110g</b></div>
+          </div>
+          <div class="scoop-badge">Sin scoop hoy</div>
+        </div>
+      </div>
+
+      <div class="blocks">
+        <div class="block">
+          <div class="block-head" onclick="toggle(this)">
+            <span class="block-name">Desayuno</span>
+            <span class="block-hour">08:00</span>
+          </div>
+          <div class="block-body">
+            <div class="food-row"><span class="food-name">Cereal</span><span class="food-qty">1</span><span class="food-ex">30g avena</span></div>
+            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">2</span><span class="food-ex">2 huevos</span></div>
+            <div class="food-row"><span class="food-name">Lácteo</span><span class="food-qty">1</span><span class="food-ex">1 yogurt</span></div>
+            <div class="food-row"><span class="food-name">ARL</span><span class="food-qty">1</span><span class="food-ex">10 nueces mariposa</span></div>
+            <div class="food-row"><span class="food-name">Fruta</span><span class="food-qty">1</span><span class="food-ex">1 pera</span></div>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-head" onclick="toggle(this)">
+            <span class="block-name">Colación</span>
+            <span class="block-hour">11:00</span>
+          </div>
+          <div class="block-body">
+            <div class="food-row"><span class="food-name">Fruta</span><span class="food-qty">1</span><span class="food-ex">1 manzana</span></div>
+            <div class="food-row"><span class="food-name">ARL</span><span class="food-qty">1</span><span class="food-ex">40 pistachos</span></div>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-head" onclick="toggle(this)">
+            <span class="block-name">Almuerzo</span>
+            <span class="block-hour">13:00</span>
+          </div>
+          <div class="block-body">
+            <div class="food-row"><span class="food-name">Cereal</span><span class="food-qty">1</span><span class="food-ex">25g arroz integral</span></div>
+            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">3</span><span class="food-ex">140g lentejas + 40g pollo</span></div>
+            <div class="food-row"><span class="food-name">VG</span><span class="food-qty">1</span><span class="food-ex">1t brócoli</span></div>
+            <div class="food-row"><span class="food-name">VLC</span><span class="food-qty">1</span><span class="food-ex">1t apio</span></div>
+            <div class="food-row"><span class="food-name">Aceite</span><span class="food-qty">½</span><span class="food-ex">2 cdta oliva</span></div>
+            <div class="food-row"><span class="food-name">Fruta</span><span class="food-qty">1</span><span class="food-ex">2 mandarinas</span></div>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-head" onclick="toggle(this)">
+            <span class="block-name">Cena</span>
+            <span class="block-hour">20:00</span>
+          </div>
+          <div class="block-body">
+            <div class="food-row"><span class="food-name">Cereal</span><span class="food-qty">1</span><span class="food-ex">100g arroz cocido</span></div>
+            <div class="food-row"><span class="food-name">Proteína</span><span class="food-qty">4</span><span class="food-ex">160g carne magra o 390g merluza</span></div>
+            <div class="food-row"><span class="food-name">VG</span><span class="food-qty">1</span><span class="food-ex">1t brócoli</span></div>
+            <div class="food-row"><span class="food-name">VLC</span><span class="food-qty">1</span><span class="food-ex">1t pepino</span></div>
+            <div class="food-row"><span class="food-name">ARL</span><span class="food-qty">2</span><span class="food-ex">90g palta + 11 aceitunas</span></div>
+            <div class="food-row"><span class="food-name">Aceite</span><span class="food-qty">½</span><span class="food-ex">2 cdta oliva</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="totals">
+        <div class="total-chip">Cereal <b>3</b></div>
+        <div class="total-chip">Proteína <b>9</b></div>
+        <div class="total-chip">Lácteo <b>1</b></div>
+        <div class="total-chip">Fruta <b>3</b></div>
+        <div class="total-chip">ARL <b>4</b></div>
+        <div class="total-chip">VG <b>2</b></div>
+        <div class="total-chip">VLC <b>2+</b></div>
+        <div class="total-chip">Aceite <b>1</b></div>
+        <div class="total-chip">Agua <b>2 L</b></div>
+      </div>
+    </div>
+
+    <!-- DATOS -->
+    <div class="panel active" id="datos">
+      <div class="page-header">
+        <div class="page-tag">Composición corporal</div>
+        <div class="page-title">Mis datos</div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat"><div class="stat-label">Peso actual</div><div class="stat-val">70 kg</div><div class="stat-sub">−3,1 kg desde EV1</div></div>
+        <div class="stat"><div class="stat-label">Grasa corporal</div><div class="stat-val or">9,6%</div><div class="stat-sub">−2,18% desde EV1</div></div>
+        <div class="stat"><div class="stat-label">Masa muscular</div><div class="stat-val or">52,4%</div><div class="stat-sub">+1,69% desde EV1</div></div>
+        <div class="stat"><div class="stat-label">Masa magra</div><div class="stat-val">36,4 kg</div><div class="stat-sub">Base de cálculo TMB</div></div>
+        <div class="stat"><div class="stat-label">TDEE real</div><div class="stat-val">2.553</div><div class="stat-sub">kcal · Katch-McArdle</div></div>
+        <div class="stat"><div class="stat-label">Pliegues 6/8</div><div class="stat-val">42/57</div><div class="stat-sub">mm · −18/−24 desde EV1</div></div>
+      </div>
+
+      <div class="data-block">
+        <div class="data-head">Proteína total por tipo de día</div>
+        <div class="data-body">
+          <div class="data-row"><span class="data-row-name">9 porciones comida</span><span class="data-row-val">~90–100 g</span></div>
+          <div class="data-divider"></div>
+          <div class="data-row"><span class="data-row-name">Día de fuerza + 1 scoop</span><span class="data-row-val">~125 g total</span></div>
+          <div class="data-row"><span class="data-row-name">Día de trote + ½ scoop</span><span class="data-row-val">~112 g total</span></div>
+          <div class="data-row"><span class="data-row-name">Día de descanso</span><span class="data-row-val">~90–100 g total</span></div>
+        </div>
+      </div>
+
+      <div class="data-block">
+        <div class="data-head">Calorías por tipo de día</div>
+        <div class="data-body">
+          <div class="data-row"><span class="data-row-name">TDEE base</span><span class="data-row-val">2.553 kcal</span></div>
+          <div class="data-divider"></div>
+          <div class="data-row"><span class="data-row-name">Día de fuerza</span><span class="data-row-val">~2.650 kcal (+97)</span></div>
+          <div class="data-row"><span class="data-row-name">Día de trote</span><span class="data-row-val">~2.750 kcal (+197)</span></div>
+          <div class="data-row"><span class="data-row-name">Día de descanso</span><span class="data-row-val">~2.450 kcal (−103)</span></div>
+          <div class="data-divider"></div>
+          <div class="data-row"><span class="data-row-name">Superávit neto semanal</span><span class="data-row-val">~279 kcal</span></div>
+        </div>
+      </div>
+
+      <div class="data-block">
+        <div class="data-head">Ganancia esperada</div>
+        <div class="data-body">
+          <div class="data-row"><span class="data-row-name">Aumento de peso mensual</span><span class="data-row-val">0,2–0,4 kg</span></div>
+          <div class="data-row"><span class="data-row-name">Tejido muscular nuevo</span><span class="data-row-val">~0,15 kg/mes</span></div>
+          <div class="data-row"><span class="data-row-name">Ritmo elegido</span><span class="data-row-val">Lento y limpio</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PORCIONES -->
+    <div class="panel" id="porciones">
+      <div class="page-header">
+        <div class="page-tag">Referencia rápida</div>
+        <div class="page-title">Guía de porciones</div>
+      </div>
+
+      <div id="porc-menu" class="porc-menu">
+        <button class="porc-btn" onclick="showPorc('lacteos')">
+          <div class="porc-btn-icon">🥛</div>
+          <span class="porc-btn-name">Lácteos</span>
+          <span class="porc-btn-arrow">Ver →</span>
+        </button>
+        <button class="porc-btn" onclick="showPorc('proteinas')">
+          <div class="porc-btn-icon">🥩</div>
+          <span class="porc-btn-name">Proteínas</span>
+          <span class="porc-btn-arrow">Ver →</span>
+        </button>
+        <button class="porc-btn" onclick="showPorc('frutas')">
+          <div class="porc-btn-icon">🍎</div>
+          <span class="porc-btn-name">Frutas</span>
+          <span class="porc-btn-arrow">Ver →</span>
+        </button>
+        <button class="porc-btn" onclick="showPorc('vg')">
+          <div class="porc-btn-icon">🥦</div>
+          <span class="porc-btn-name">Verduras generales</span>
+          <span class="porc-btn-arrow">Ver →</span>
+        </button>
+        <button class="porc-btn" onclick="showPorc('vlc')">
+          <div class="porc-btn-icon">🥬</div>
+          <span class="porc-btn-name">Verduras libre consumo</span>
+          <span class="porc-btn-arrow">Ver →</span>
+        </button>
+        <button class="porc-btn" onclick="showPorc('cereales')">
+          <div class="porc-btn-icon">🌾</div>
+          <span class="porc-btn-name">Cereales</span>
+          <span class="porc-btn-arrow">Ver →</span>
+        </button>
+        <button class="porc-btn" onclick="showPorc('arl')">
+          <div class="porc-btn-icon">🥑</div>
+          <span class="porc-btn-name">ARL · Grasas saludables</span>
+          <span class="porc-btn-arrow">Ver →</span>
+        </button>
+        <button class="porc-btn" onclick="showPorc('aceites')">
+          <div class="porc-btn-icon">🫒</div>
+          <span class="porc-btn-name">Aceites</span>
+          <span class="porc-btn-arrow">Ver →</span>
+        </button>
+      </div>
+
+      <div id="porc-detail" class="porc-detail" style="display:none">
+        <button class="porc-back" onclick="backPorc()">← Volver</button>
+
+        <div class="porc-section" id="porc-lacteos">
+          <div class="data-block">
+            <div class="data-head">Lácteos &nbsp;—&nbsp; 1 porción</div>
+            <div class="data-body">
+              <div class="data-row"><span class="data-row-name">Leche descremada / semidescremada</span><span class="data-row-val">200 cc (1 taza)</span></div>
+              <div class="data-row"><span class="data-row-name">Bebida vegetal</span><span class="data-row-val">150 ml (¾ taza)</span></div>
+              <div class="data-row"><span class="data-row-name">Yogurt diet / light</span><span class="data-row-val">1 unidad (125 ml)</span></div>
+              <div class="data-row"><span class="data-row-name">Yogurt natural</span><span class="data-row-val">150 ml (½ taza)</span></div>
+              <div class="data-row"><span class="data-row-name">Quesillo</span><span class="data-row-val">90 g (1 rodela 3×3 cm)</span></div>
+              <div class="data-row"><span class="data-row-name">Ricota</span><span class="data-row-val">30 g (2 cdas)</span></div>
+              <div class="data-row"><span class="data-row-name">Queso fresco</span><span class="data-row-val">30 g (1 reb 1,5 cm)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="porc-section" id="porc-proteinas">
+          <div class="data-block">
+            <div class="data-head">Proteínas &nbsp;—&nbsp; 1 porción (crudo)</div>
+            <div class="data-body">
+              <div class="data-row"><span class="data-row-name">Vacuno / pollo / pavo (pechuga)</span><span class="data-row-val">50 g</span></div>
+              <div class="data-row"><span class="data-row-name">Salmón / jaiva</span><span class="data-row-val">80 g</span></div>
+              <div class="data-row"><span class="data-row-name">Atún / jurel / trucha / camarones</span><span class="data-row-val">60 g</span></div>
+              <div class="data-row"><span class="data-row-name">Merluza / congrio / corvina / pejerrey</span><span class="data-row-val">120 g</span></div>
+              <div class="data-row"><span class="data-row-name">Huevo</span><span class="data-row-val">100 g (2 unidades)</span></div>
+              <div class="data-row"><span class="data-row-name">Soya / carne de soya</span><span class="data-row-val">20 g</span></div>
+              <div class="data-row"><span class="data-row-name">Tofu</span><span class="data-row-val">120 g</span></div>
+              <div class="data-divider"></div>
+              <div class="data-row"><span class="data-row-name">Lenteja cocida</span><span class="data-row-val">140 g (¾ taza)</span></div>
+              <div class="data-row"><span class="data-row-name">Garbanzo cocido</span><span class="data-row-val">130 g (¾ taza)</span></div>
+              <div class="data-row"><span class="data-row-name">Poroto cocido</span><span class="data-row-val">100 g (¾ taza)</span></div>
+              <div class="data-row"><span class="data-row-name">Arvejas cocidas</span><span class="data-row-val">200 g (¾ taza)</span></div>
+              <div class="data-divider"></div>
+              <div class="data-row"><span class="data-row-name">½ scoop whey protein</span><span class="data-row-val">= 1 porción</span></div>
+            </div>
+          </div>
+          <div class="data-block">
+            <div class="data-head">Proteínas &nbsp;—&nbsp; 1 porción (cocido)</div>
+            <div class="data-body">
+              <div class="data-row"><span class="data-row-name">Vacuno / pollo / pavo</span><span class="data-row-val">40 g</span></div>
+              <div class="data-row"><span class="data-row-name">Salmón / jaiva</span><span class="data-row-val">64 g</span></div>
+              <div class="data-row"><span class="data-row-name">Atún / jurel / trucha</span><span class="data-row-val">48 g</span></div>
+              <div class="data-row"><span class="data-row-name">Merluza / congrio / corvina</span><span class="data-row-val">96 g</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="porc-section" id="porc-frutas">
+          <div class="data-block">
+            <div class="data-head">Frutas &nbsp;—&nbsp; 1 porción</div>
+            <div class="data-body">
+              <div class="data-row"><span class="data-row-name">Naranja / manzana / pera / durazno</span><span class="data-row-val">1 unidad chica</span></div>
+              <div class="data-row"><span class="data-row-name">Plátano</span><span class="data-row-val">1 unidad chica (60 g)</span></div>
+              <div class="data-row"><span class="data-row-name">Dátiles</span><span class="data-row-val">3 unidades (~60 g)</span></div>
+              <div class="data-row"><span class="data-row-name">Kiwi / mandarina / ciruela / damasco</span><span class="data-row-val">2 unidades</span></div>
+              <div class="data-row"><span class="data-row-name">Piña / frambuesa / melón / arándanos</span><span class="data-row-val">1 taza</span></div>
+              <div class="data-row"><span class="data-row-name">Frutilla / sandía</span><span class="data-row-val">200 g (1 taza)</span></div>
+              <div class="data-row"><span class="data-row-name">Uvas / cerezas / chirimoya</span><span class="data-row-val">90 g (1 taza)</span></div>
+              <div class="data-row"><span class="data-row-name">Mango</span><span class="data-row-val">1 taza</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="porc-section" id="porc-vg">
+          <div class="data-block">
+            <div class="data-head">Verduras generales (VG) &nbsp;—&nbsp; 1 porción</div>
+            <div class="data-body">
+              <div class="data-row"><span class="data-row-name">Acelga cocida / espinaca / zanahoria</span><span class="data-row-val">½ taza</span></div>
+              <div class="data-row"><span class="data-row-name">Berenjena</span><span class="data-row-val">½ taza (100 g)</span></div>
+              <div class="data-row"><span class="data-row-name">Champiñones / cebolla / zapallo</span><span class="data-row-val">¾ taza</span></div>
+              <div class="data-row"><span class="data-row-name">Poroto verde</span><span class="data-row-val">¾ taza (70 g)</span></div>
+              <div class="data-row"><span class="data-row-name">Brócoli / coliflor / betarraga</span><span class="data-row-val">1 taza</span></div>
+              <div class="data-row"><span class="data-row-name">Espárrago</span><span class="data-row-val">5 unidades (100 g)</span></div>
+              <div class="data-row"><span class="data-row-name">Tomate / alcachofa</span><span class="data-row-val">1 unidad chica</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="porc-section" id="porc-vlc">
+          <div class="data-block">
+            <div class="data-head">Verduras libre consumo (VLC) &nbsp;—&nbsp; 1 porción</div>
+            <div class="data-body">
+              <div class="data-row"><span class="data-row-name">Apio / lechuga / achicoria / repollo</span><span class="data-row-val">1 taza</span></div>
+              <div class="data-row"><span class="data-row-name">Pepino / pimentón</span><span class="data-row-val">1 taza</span></div>
+              <div class="data-row"><span class="data-row-name">Zapallo italiano crudo</span><span class="data-row-val">1 taza (100 g)</span></div>
+              <div class="data-row"><span class="data-row-name">Acelga cruda / espinaca cruda</span><span class="data-row-val">1 taza (50 g)</span></div>
+              <div class="data-row"><span class="data-row-name">Cochayuyo</span><span class="data-row-val">25 g</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="porc-section" id="porc-cereales">
+          <div class="data-block">
+            <div class="data-head">Cereales &nbsp;—&nbsp; 1 porción</div>
+            <div class="data-body">
+              <div class="data-row"><span class="data-row-name">Avena / granola</span><span class="data-row-val">30 g (¼ taza)</span></div>
+              <div class="data-row"><span class="data-row-name">Arroz / fideos / quinoa (crudo)</span><span class="data-row-val">35–37 g (3 cdas)</span></div>
+              <div class="data-row"><span class="data-row-name">Arroz cocido</span><span class="data-row-val">100 g (¾ taza)</span></div>
+              <div class="data-row"><span class="data-row-name">Arroz integral cocido</span><span class="data-row-val">120 g</span></div>
+              <div class="data-row"><span class="data-row-name">Fideos / quinoa / cous cous cocido</span><span class="data-row-val">110 g (¾ taza)</span></div>
+              <div class="data-row"><span class="data-row-name">Papa</span><span class="data-row-val">1 unidad chica (150 g)</span></div>
+              <div class="data-row"><span class="data-row-name">Camote</span><span class="data-row-val">1 unidad chica (110 g)</span></div>
+              <div class="data-row"><span class="data-row-name">Pan molde</span><span class="data-row-val">2 rebanadas</span></div>
+              <div class="data-row"><span class="data-row-name">Marraqueta / hallulla</span><span class="data-row-val">½ unidad (50 g)</span></div>
+              <div class="data-row"><span class="data-row-name">Pan pita</span><span class="data-row-val">1 unidad</span></div>
+              <div class="data-row"><span class="data-row-name">Galleta de arroz</span><span class="data-row-val">4 unidades</span></div>
+              <div class="data-row"><span class="data-row-name">Galleta soda / agua</span><span class="data-row-val">6 unidades</span></div>
+              <div class="data-row"><span class="data-row-name">Masa fajita</span><span class="data-row-val">2 pequeñas o 1 grande</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="porc-section" id="porc-arl">
+          <div class="data-block">
+            <div class="data-head">ARL · Grasas saludables &nbsp;—&nbsp; 1 porción</div>
+            <div class="data-body">
+              <div class="data-row"><span class="data-row-name">Palta</span><span class="data-row-val">90 g (½ palta)</span></div>
+              <div class="data-row"><span class="data-row-name">Almendras</span><span class="data-row-val">25 g (26 unidades)</span></div>
+              <div class="data-row"><span class="data-row-name">Nueces mariposa</span><span class="data-row-val">25 g (10 unidades)</span></div>
+              <div class="data-row"><span class="data-row-name">Nueces enteras</span><span class="data-row-val">25 g (5 unidades)</span></div>
+              <div class="data-row"><span class="data-row-name">Pistachos</span><span class="data-row-val">30 g (40 unidades)</span></div>
+              <div class="data-row"><span class="data-row-name">Avellanas</span><span class="data-row-val">30 g (50 unidades)</span></div>
+              <div class="data-row"><span class="data-row-name">Castañas de cajú</span><span class="data-row-val">30 g (24 unidades)</span></div>
+              <div class="data-row"><span class="data-row-name">Aceitunas</span><span class="data-row-val">115 g (11 unidades)</span></div>
+              <div class="data-row"><span class="data-row-name">Semillas (chía / linaza / sésamo)</span><span class="data-row-val">30 g</span></div>
+              <div class="data-row"><span class="data-row-name">Chocolate amargo >70%</span><span class="data-row-val">30 g</span></div>
+              <div class="data-row"><span class="data-row-name">Coco deshidratado</span><span class="data-row-val">25 g</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="porc-section" id="porc-aceites">
+          <div class="data-block">
+            <div class="data-head">Aceites &nbsp;—&nbsp; 1 porción</div>
+            <div class="data-body">
+              <div class="data-row"><span class="data-row-name">Aceite de oliva / canola / maravilla</span><span class="data-row-val">2 cdtas (10 cc)</span></div>
+              <div class="data-row"><span class="data-row-name">Aceite de coco</span><span class="data-row-val">20 g (4 cdtas)</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  function show(id, el) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item, .mob-pill').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    el.classList.add('active');
+    const mirror = document.querySelectorAll(`[onclick="show('${id}',this)"]`);
+    mirror.forEach(m => m.classList.add('active'));
+    if (id === 'porciones') {
+      document.getElementById('porc-menu').style.display = 'flex';
+      document.getElementById('porc-detail').style.display = 'none';
+      document.querySelectorAll('.porc-section').forEach(s => s.classList.remove('active'));
+    }
+  }
+
+  function showPorc(id) {
+    document.getElementById('porc-menu').style.display = 'none';
+    document.getElementById('porc-detail').style.display = 'block';
+    document.querySelectorAll('.porc-section').forEach(s => s.classList.remove('active'));
+    document.getElementById('porc-' + id).classList.add('active');
+  }
+
+  function backPorc() {
+    document.getElementById('porc-detail').style.display = 'none';
+    document.getElementById('porc-menu').style.display = 'flex';
+  }
+
+  function toggle(head) {
+    const body = head.nextElementSibling;
+    body.classList.toggle('open');
+  }
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    });
+  }
+</script>
+</body>
+</html>
